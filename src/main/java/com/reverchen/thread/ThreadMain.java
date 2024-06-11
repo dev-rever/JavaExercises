@@ -10,8 +10,9 @@ public class ThreadMain {
 
     public static void main(String[] args) {
 
-        createThreadExample();
-        joinExample();
+//        createThreadExample();
+        sleepExample();
+//        joinExample();
 
     }
 
@@ -39,6 +40,20 @@ public class ThreadMain {
         }
     }
 
+    private static void sleepExample() {
+        Runnable rb = () -> {
+            try {
+                System.out.println(Thread.currentThread().getName() + " now sleep 1000ms.");
+                Thread.sleep(1000L);
+                System.out.println(Thread.currentThread().getName() + " now resume.");
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        new Thread(rb, "thread-1").start();
+    }
+
     private static void joinExample() {
 
         Runnable rb = () -> {
@@ -56,7 +71,7 @@ public class ThreadMain {
             // The main thread will wait for the completion of the t1 thread before executing subsequent tasks.
             t1.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
 
         t2.start();
