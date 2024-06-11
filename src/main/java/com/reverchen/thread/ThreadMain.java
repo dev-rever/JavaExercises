@@ -10,6 +10,12 @@ public class ThreadMain {
 
     public static void main(String[] args) {
 
+        createThreadExample();
+        joinExample();
+
+    }
+
+    private static void createThreadExample() {
         // method 1: extend Thread class and override "run()" method.
         mThread mthread = new mThread();
         mthread.start();
@@ -31,5 +37,29 @@ public class ThreadMain {
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private static void joinExample() {
+
+        Runnable rb = () -> {
+            for (int i = 1; i <= 50; i++) {
+                System.out.println(Thread.currentThread().getName() + " \"i\" increased to: " + i);
+            }
+        };
+
+        Thread t1 = new Thread(rb, "thread-1");
+        Thread t2 = new Thread(rb, "thread-2");
+        Thread t3 = new Thread(rb, "thread-3");
+
+        t1.start();
+        try {
+            // The main thread will wait for the completion of the t1 thread before executing subsequent tasks.
+            t1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        t2.start();
+        t3.start();
     }
 }
